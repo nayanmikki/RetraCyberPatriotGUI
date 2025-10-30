@@ -1,0 +1,284 @@
+===============================================================================
+           CYBERPATRIOT MINT 21 GUI — INSTALLATION AND SETUP GUIDE
+===============================================================================
+
+This guide will help you install and run the CyberPatriot training application
+on Linux Mint 21. Follow the steps carefully and you'll be up and running in 
+about 10 minutes.
+
+
+===============================================================================
+SYSTEM REQUIREMENTS
+===============================================================================
+
+Before you begin, make sure your computer meets these requirements:
+
+   • Operating System: Linux Mint 21 or Ubuntu 22.04
+   • Memory (RAM): At least 2 GB (4 GB recommended)
+   • Disk Space: About 500 MB free space
+   • Screen Resolution: 1200 x 800 or larger
+
+
+===============================================================================
+WHAT GETS INSTALLED
+===============================================================================
+
+SYSTEM PACKAGES
+-------------------------------------------------------------------------------
+   • Node.js — Runs the application
+   • npm — Downloads application components
+   • build-essential — Compiles certain packages
+   • curl — Downloads files from the internet
+
+DESKTOP LIBRARIES
+-------------------------------------------------------------------------------
+   • libgtk-3-0
+   • libnotify4
+   • libnss3
+   • libxss1
+   • libxtst6
+   • xdg-utils
+   • libatspi2.0-0
+   • libdrm2
+   • libgbm1
+   • libasound2
+
+APPLICATION PACKAGES
+-------------------------------------------------------------------------------
+   • next
+   • react
+   • react-dom
+   • electron
+   • framer-motion
+   • reactflow
+   • tailwindcss
+   • lucide-react
+   • typescript
+   • And about 800 supporting packages
+
+TOTAL SIZE: About 500 MB
+
+
+===============================================================================
+INSTALLATION STEPS
+===============================================================================
+
+STEP 1: COPY PROJECT FILES
+-------------------------------------------------------------------------------
+
+Copy the entire MintCPGUI folder to your Linux Mint computer.
+
+Recommended location:
+   /home/yourusername/MintCPGUI
+
+You can place it anywhere you like, just remember where you put it.
+
+
+STEP 2: OPEN TERMINAL
+-------------------------------------------------------------------------------
+
+Right-click inside the MintCPGUI folder and choose "Open in Terminal".
+
+Or open Terminal and type:
+   cd /home/yourusername/MintCPGUI
+
+Replace "yourusername" with your actual username.
+
+
+STEP 3: MAKE SCRIPTS EXECUTABLE
+-------------------------------------------------------------------------------
+
+Type these two commands, one at a time:
+
+   chmod +x install-and-run.sh
+   chmod +x run-app.sh
+
+Press Enter after each one.
+
+
+STEP 4: RUN THE AUTOMATIC INSTALLER (RECOMMENDED)
+-------------------------------------------------------------------------------
+
+Type this command:
+   ./install-and-run.sh
+
+Press Enter and wait.
+
+WHAT HAPPENS NEXT:
+   • The installer checks if Node.js is installed
+   • If not found, it downloads and installs Node.js automatically
+   • It installs all required system packages
+   • It downloads all application files (this takes the longest)
+   • When done, the application window opens automatically
+
+TIME REQUIRED: 5 to 10 minutes depending on your internet speed.
+
+
+STEP 5: MANUAL INSTALLATION (IF AUTOMATIC FAILS)
+-------------------------------------------------------------------------------
+
+If the automatic installer doesn't work, follow these steps:
+
+A. Install Node.js:
+   curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+   sudo apt install -y nodejs
+
+B. Install System Tools:
+   sudo apt update
+   sudo apt install -y build-essential
+
+C. Install Desktop Libraries:
+   sudo apt install -y libgtk-3-0 libnotify4 libnss3 libxss1 libxtst6 xdg-utils libatspi2.0-0 libdrm2 libgbm1 libasound2
+
+D. Install Application Packages:
+   npm install
+
+E. Launch the Application:
+   npm run electron-dev
+
+
+===============================================================================
+POST-INSTALLATION
+===============================================================================
+
+LAUNCHING THE APP AFTER INSTALLATION
+-------------------------------------------------------------------------------
+
+You have two easy options:
+
+OPTION 1: Quick Launcher
+   ./run-app.sh
+
+OPTION 2: Manual Launch
+   npm run electron-dev
+
+Both will open the application in a new window.
+
+
+BUILDING A STANDALONE PACKAGE (OPTIONAL)
+-------------------------------------------------------------------------------
+
+If you want to create an installable file:
+   npm run dist
+
+The file will be saved in a folder called "dist".
+
+
+VERIFYING THE INSTALLATION
+-------------------------------------------------------------------------------
+
+Check that everything installed correctly:
+
+   node --version
+   Should show: v20.x.x
+
+   npm --version
+   Should show: 9.x.x or higher
+
+   ls node_modules
+   Should show many folders (about 800+)
+
+
+===============================================================================
+TROUBLESHOOTING
+===============================================================================
+
+PROBLEM: Node.js not found
+SOLUTION: Install Node.js manually using Step 5A above.
+
+PROBLEM: Permission denied when running scripts
+SOLUTION: Type this command:
+   chmod +x install-and-run.sh run-app.sh
+
+PROBLEM: Application window does not open
+SOLUTION: Reinstall desktop libraries:
+   sudo apt install -y libgtk-3-0 libnotify4 libnss3 libxss1
+
+PROBLEM: Cannot find module error
+SOLUTION: Reinstall packages:
+   rm -rf node_modules package-lock.json
+   npm install
+
+PROBLEM: Port 3000 already in use
+SOLUTION: Stop the conflicting process:
+   sudo kill -9 $(sudo lsof -t -i:3000)
+
+PROBLEM: Build or installation fails
+SOLUTION: Make sure build tools are installed:
+   sudo apt install -y build-essential python3
+
+
+===============================================================================
+UNINSTALLATION
+===============================================================================
+
+TO REMOVE THE APPLICATION
+-------------------------------------------------------------------------------
+
+OPTION 1: Use the Uninstall Script
+   chmod +x uninstall.sh
+   ./uninstall.sh
+
+Follow the menu to choose what to remove.
+
+OPTION 2: Use the GUI Uninstall Panel
+   Open the application
+   Click the "Uninstall" tab
+   Select what you want to remove
+   Click Uninstall
+
+OPTION 3: Manual Removal
+   Remove just the application folder:
+      rm -rf /home/yourusername/MintCPGUI
+
+   Remove Node.js too:
+      sudo apt remove nodejs npm
+      sudo apt autoremove
+
+   Remove all libraries:
+      sudo apt remove build-essential libgtk-3-0 libnotify4 libnss3 libxss1 libxtst6
+      sudo apt autoremove
+
+
+===============================================================================
+IMPORTANT NOTES
+===============================================================================
+
+   • First-time installation takes 5 to 10 minutes
+   • After that, the app launches in about 5 seconds
+   • You need internet connection only for the first installation
+   • Some operations inside the app require sudo (administrator) access
+   • If you see password prompts, enter your user password
+   • The application runs in a desktop window, not a web browser
+   • All your settings are saved automatically
+
+
+===============================================================================
+SUPPORT
+===============================================================================
+
+IF YOU NEED HELP:
+
+   • Check the README.md file in the project folder
+   • Read the install-and-run.sh script for technical details
+   • Visit Linux Mint community forums
+   • Refer to CyberPatriot official documentation
+
+COMMON QUESTIONS:
+
+   Q: Do I need to reinstall every time?
+   A: No. After the first installation, just run ./run-app.sh
+
+   Q: Can I move the folder after installing?
+   A: Yes, but you'll need to run npm install again in the new location.
+
+   Q: Will this affect other programs?
+   A: No. The application uses its own packages in the node_modules folder.
+
+   Q: How do I update the application?
+   A: Run: npm install
+
+
+===============================================================================
+                              END OF GUIDE
+===============================================================================

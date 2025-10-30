@@ -14,6 +14,17 @@ export interface SystemUser {
 
 export async function GET() {
   try {
+    // Check if running on Linux
+    const isLinux = process.platform === 'linux';
+    
+    if (!isLinux) {
+      return NextResponse.json({
+        success: false,
+        error: 'This application must run on a Linux system (Linux Mint 21)',
+        platform: process.platform,
+      }, { status: 400 });
+    }
+
     // Get all users with UID >= 1000 (regular users)
     const { stdout: userOutput } = await execAsync(
       "getent passwd | awk -F: '$3 >= 1000 && $3 < 65534 {print $1\":\"$3\":\"$6}'"
@@ -71,7 +82,7 @@ export async function GET() {
     // Get firewall status
     let firewallStatus = 'unknown';
     try {
-      const { stdout: ufwOutput } = await execAsync('sudo ufw status');
+      const { stdout: ufwOutput } = await execAsync('sudo -n ufw status 2>/dev/null || echo "Status: unknown"');
       firewallStatus = ufwOutput.includes('Status: active') ? 'active' : 'inactive';
     } catch (error) {
       firewallStatus = 'error';
@@ -94,6 +105,7 @@ export async function GET() {
       {
         success: false,
         error: error.message || 'Scan failed',
+        details: error.stderr || error.stdout || '',
       },
       { status: 500 }
     );

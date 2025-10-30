@@ -28,6 +28,9 @@ interface AppContextType {
   error: string | null;
   setError: (error: string | null) => void;
   
+  dryRunMode: boolean;
+  setDryRunMode: (mode: boolean) => void;
+  
   scanSystem: () => Promise<void>;
   executeOperation: (operationId: string, params?: Record<string, string>) => Promise<void>;
 }
@@ -42,6 +45,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [systemInfo, setSystemInfo] = useState<SystemInfo | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [dryRunMode, setDryRunMode] = useState(false);
 
   const updateUserLabel = useCallback((username: string, label: SystemUser['label']) => {
     setUsers(prev => prev.map(user =>
@@ -79,6 +83,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     
     try {
       const response = await fetch('/api/scan');
+      
+      // Check if response is JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Server returned non-JSON response. Make sure you are running on Linux Mint 21.');
+      }
+      
       const data = await response.json();
       
       if (!data.success) {
@@ -95,7 +106,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       setUsers(usersWithPositions);
       setSystemInfo(data.system);
     } catch (err: any) {
-      setError(err.message || 'Failed to scan system');
+      const errorMessage = err.message || 'Failed to scan system';
+      setError(errorMessage);
       console.error('Scan error:', err);
     } finally {
       setLoading(false);
@@ -163,6 +175,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setLoading,
         error,
         setError,
+        dryRunMode,
+        setDryRunMode,
         scanSystem,
         executeOperation,
       }}
